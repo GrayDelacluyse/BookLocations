@@ -1,0 +1,15 @@
+﻿@model IEnumerable<BookLocations.Models.Graph>
+@{
+    ViewBag.Title = "Book Location";
+}
+
+
+@{ foreach (var item in Model)
+    {
+        <div class="Place">@item.name</div>
+    }
+}
+
+<div class="message">
+    @ViewBag.message
+</div>
