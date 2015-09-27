@@ -1,0 +1,83 @@
+﻿@model IEnumerable<BookLocations.Models.CSVResult>
+@{
+    ViewBag.Title = "CSV";
+}
+
+<style>
+    .itemWrapper div
+    {
+        border: 1px solid black;
+    }
+
+    .itemWrapper
+    {
+        clear:left;
+    }
+
+    .Title{
+        font-weight:bold;
+
+    }
+    .Author{
+    }
+    .ErrorMessage
+    {
+        color:red;
+    }
+    .Location
+    {
+        clear:left;
+    }
+
+    .locationsWrapper div
+    {
+        border:none;
+    }
+
+</style>
+
+<h2>CSV</h2>
+
+
+@*@using (Html.BeginForm("CSV", "Home", null, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    
+    <h4>Please Upload your CSV.</h4>
+                <hr />
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+}*@
+
+<div>@ViewBag.Message</div>
+
+@using (Html.BeginForm("CSV", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <input type="file" name="file" />
+    <input type="submit" value="OK" />
+}
+
+@if (Model != null)
+{
+    foreach (var item in Model)
+    {
+    <div class="row itemWrapper">
+        <div class="Author col-md-2">
+            @item.Author
+        </div>
+        <div class="Title col-md-2">@item.Title</div>
+        <div class="locationsWrapper col-md-3">
+            @foreach (var location in item.Locations)
+            {
+                <div class="Location">@location.name</div>
+            }
+        </div>
+        <div class="ErrorMessage col-md-5">@item.ErrorMessage</div>
+    </div>
+    }
+}

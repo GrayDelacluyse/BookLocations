@@ -21,7 +21,7 @@ namespace BookLocations.Models
             //public List<string> contributor { get; set; }
             //public List<string> creator { get; set; }
             //public List<object> description { get; set; }
-            public List<object> genre { get; set; }
+            public object genre { get; set; }
             //public List<string> workExample { get; set; }
         }
 

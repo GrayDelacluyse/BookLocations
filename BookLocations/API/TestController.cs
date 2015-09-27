@@ -1,4 +1,6 @@
-﻿using System;
+﻿using BookLocations.Helpers;
+using BookLocations.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -9,31 +11,13 @@ namespace BookLocations.API
 {
     public class TestController : ApiController
     {
-        // GET: api/Test
-        public IEnumerable<string> Get()
+        // GET: api/locations
+        [Route("api/locations/{Author}/{Title}")]
+        public IEnumerable<Graph> Get(string Author, string Title)
         {
-            return new string[] { "value1", "value2" };
-        }
+            var places = OclcHelper.GetLocations(Author, Title);
 
-        // GET: api/Test/5
-        public string Get(int id)
-        {
-            return "value";
-        }
-
-        // POST: api/Test
-        public void Post([FromBody]string value)
-        {
-        }
-
-        // PUT: api/Test/5
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
-        // DELETE: api/Test/5
-        public void Delete(int id)
-        {
+            return places;
         }
     }
 }
