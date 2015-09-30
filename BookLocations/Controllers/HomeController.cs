@@ -175,7 +175,7 @@ namespace BookLocations.Controllers
 
                     for (int j = 0; j < locationList.Count; j++)
                     {
-                        csvContents += "\"" + item.Author + "\",\"" + item.Title + "\",\"" + locationList[j].name+"\",\"" + item.ErrorMessage + "\"\n";
+                        csvContents += "\"" + item.Author + "\",\"" + item.Title + "\",\"" + locationList[j].name.ToString().Replace("\"","'")+"\",\"" + item.ErrorMessage + "\"\n";
                     }
                 }
 
