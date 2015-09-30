@@ -51,8 +51,70 @@ namespace BookLocations.Controllers
             return View();
         }
 
+        //[HttpPost]
+        //public ActionResult CSV(HttpPostedFileBase file)
+        //{
+        //    List<CSVResult> Results = new List<CSVResult>();
+
+        //    // Verify that the user selected a file
+        //    if (file != null && file.ContentLength > 0)
+        //    {
+
+        //        using (TextFieldParser parser = new TextFieldParser(file.InputStream))
+        //        {
+        //            parser.TextFieldType = FieldType.Delimited;
+        //            parser.SetDelimiters(",");
+        //            parser.HasFieldsEnclosedInQuotes = true;
+
+        //            //Skip first line
+        //            parser.ReadLine();
+
+        //            while (!parser.EndOfData)
+        //            {
+        //                //Column 5: Title
+        //                //Column 6: Author
+
+        //                CSVResult currentResult = new CSVResult();
+
+        //                string[] fields = parser.ReadFields();
+        //                currentResult.Title = fields[4];
+        //                currentResult.Author = fields[5];
+
+        //                Results.Add(currentResult);
+
+        //                if (Results.Count > 150) break;
+        //            }
+        //        }
+
+        //        //Do parallels awesomeness here
+        //        Parallel.ForEach(Results, r =>
+        //        {
+        //            try
+        //            {
+        //                r.Locations = OclcHelper.GetLocations(r.Author, r.Title);
+        //            }
+        //            catch (Exception ie)
+        //            {
+        //                //Handle the errors
+        //                r.ErrorMessage = ie.ToString();
+        //            }
+        //        });
+
+
+
+
+
+        //        return View(Results);
+        //    }
+
+        //    // redirect back to the index action to show the form once again
+        //    ViewBag.Message = "Could not read file";
+        //    return RedirectToAction("CSV");
+        //}
+
+
         [HttpPost]
-        public ActionResult CSV(HttpPostedFileBase file)
+        public FileContentResult CSV(HttpPostedFileBase file)
         {
             List<CSVResult> Results = new List<CSVResult>();
 
@@ -65,7 +127,7 @@ namespace BookLocations.Controllers
                     parser.TextFieldType = FieldType.Delimited;
                     parser.SetDelimiters(",");
                     parser.HasFieldsEnclosedInQuotes = true;
-                    
+
                     //Skip first line
                     parser.ReadLine();
 
@@ -100,16 +162,30 @@ namespace BookLocations.Controllers
                     }
                 });
 
+                string csvContents = "Auther,Title,Location,Error Message\n";
+                for (int i = 0; i < Results.Count; i++)
+                {
+                    var item = Results[i];
+                    var locationList = item.Locations.ToList();
+
+                    if (locationList.Count == 0)
+                    {
+                        csvContents += "\""+item.Author + "\",\"" + item.Title + "\",,\"" + item.ErrorMessage + "\"\n";
+                    }
+
+                    for (int j = 0; j < locationList.Count; j++)
+                    {
+                        csvContents += "\"" + item.Author + "\",\"" + item.Title + "\",\"" + locationList[j].name+"\",\"" + item.ErrorMessage + "\"\n";
+                    }
+                }
 
 
-
-
-                return View(Results);
+                return File(new System.Text.UTF8Encoding().GetBytes(csvContents), "text/csv", "BookResults.csv");
+             
             }
 
-            // redirect back to the index action to show the form once again
-            ViewBag.Message = "Could not read file";
-            return RedirectToAction("CSV");
+            return File(new System.Text.UTF8Encoding().GetBytes(""), "text/csv", "BadFileInput.csv");
         }
+        
     }
 }

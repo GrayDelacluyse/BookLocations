@@ -39,6 +39,7 @@ namespace BookLocations.Helpers
 
             //Go to Details Page
             //http://www.worldcat.org/oclc/1859740
+            client.Headers.Add(HttpRequestHeader.Cookie, "owcLocRedirectPersistent=_nr.selected; owcLocRedirectSession=_nr.selected");
             string oclcDetailPageResult = client.DownloadString("http://www.worldcat.org/oclc/" + oclcNumber);
 
             //Get the webservice ID from the detail page
